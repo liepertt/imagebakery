@@ -208,6 +208,12 @@ if [ "$(/bin/ls $BAKERYDIR/debs-to-install/*.deb 2>/dev/null)" ] ; then
 	dpkg --root $IMAGEDIR --force-architecture -i $BAKERYDIR/debs-to-install/*.deb
 fi
 
+#enable ssh on stretch
+if [ `chroot $IMAGEDIR lsb_release -c | sed 's/Codename:\s\([A-Za-z].*\).*/\1/g'` == "stretch" ]
+then
+   chroot $IMAGEDIR touch /boot/ssh
+fi
+
 # remove logs
 find $IMAGEDIR/var/log -type f -delete
 
