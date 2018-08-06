@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # customize raspbian image for revolution pi
 
 if [ "$#" != 1 ] ; then
@@ -151,7 +151,8 @@ chroot $IMAGEDIR /usr/bin/patch /etc/sysctl.conf	\
 sed -i -e '1s/$/ \\4 \\6/' $IMAGEDIR/etc/issue
 
 # free up disk space
-dpkg --root $IMAGEDIR --purge `egrep -v '^#' $BAKERYDIR/debs-to-remove`
+chroot $IMAGEDIR apt purge -y `egrep -v '^#' $BAKERYDIR/debs-to-remove`
+chroot $IMAGEDIR apt autoremove -y
 
 # avoid installing unnecessary packages on this space-constrained machine
 echo 'APT::Install-Recommends "false";' >> $IMAGEDIR/etc/apt/apt.conf
